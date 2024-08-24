@@ -60,7 +60,7 @@ import {MatCard} from "@angular/material/card";
 export class GymWizardComponent implements OnInit {
   gymForm: FormGroup;
   addressForm: FormGroup;
-  coachForm: FormGroup;
+  coachForms: FormGroup[] = [];
   classForm: FormGroup;
   ownerForm: FormGroup;
   scheduleForm: FormGroup;
@@ -88,12 +88,12 @@ export class GymWizardComponent implements OnInit {
     name: {type: 'string'},
     is_freelancer: {type: 'checkBox'},
     description: {type: 'string', layout: "singleRow"},
-    preferred_gyms: {type: 'string', section:'asdsad'},
+    preferred_gyms: {type: 'string', },
     price_range: {type: 'string'},
     metadata: {type: 'chip'},
     specialization: {type: 'select'},
     images: {type: 'file'},
-    street: {type: 'string'},
+    street: {type: 'string',section:'Address'},
     city: {type: 'string'},
     state: {type: 'string'},
     country: {type: 'string'},
@@ -140,21 +140,6 @@ export class GymWizardComponent implements OnInit {
       longitude: ['']
     });
 
-    this.coachForm = this.fb.group({
-      gym_id: [''],
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      is_freelancer: [''],
-      preferred_gyms: [''],
-      specialization: ['', Validators.required],
-      street: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
-      country: ['', Validators.required],
-      postal_code: ['', Validators.required],
-      latitude: [''],
-      longitude: ['']
-    });
     this.classForm = this.fb.group({
       gym_id: [''],
       name: ['', Validators.required],
@@ -233,7 +218,6 @@ export class GymWizardComponent implements OnInit {
       this.gymService.createGym(this.gymForm.value).subscribe((gym: { id: number; }) => {
         this.gymId = gym.id;
         this.addressForm.patchValue({gym_id: this.gymId});
-        this.coachForm.patchValue({gym_id: this.gymId});
         this.classForm.patchValue({gym_id: this.gymId});
         this.ownerForm.patchValue({gym_id: this.gymId});
         this.scheduleForm.patchValue({gym_id: this.gymId});
@@ -243,9 +227,39 @@ export class GymWizardComponent implements OnInit {
     }
   }
 
+  addCoachForm(): void {
+    const coachForm = this.fb.group({
+      gym_id: [this.gymId],
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      is_freelancer: [''],
+      preferred_gyms: [''],
+      specialization: [''],
+      street: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      country: ['', Validators.required],
+      postal_code: ['', Validators.required],
+      latitude: [''],
+      longitude: ['']
+    });
+    this.coachForms.push(coachForm);
+  }
+
+  removeCoachForm(index: number): void {
+    this.coachForms.splice(index, 1);
+  }
+
   createCoach(stepper: MatStepper): void {
-    if (this.coachForm.valid) {
-      this.coachService.createCoach(this.coachForm.value).subscribe(() => {
+    let isValid = true;
+    this.coachForms.forEach(form => {
+      if (!form.valid) {
+        isValid = false;
+      }
+    });
+    if (isValid) {
+      const coaches = this.coachForms.map(form => form.value);
+      this.coachService.createCoaches(coaches).subscribe(() => {
         stepper.next();
       });
     }
@@ -253,7 +267,7 @@ export class GymWizardComponent implements OnInit {
 
   createClass(stepper: MatStepper): void {
     if (this.classForm.valid) {
-      this.classService.createClass(this.classForm.value).subscribe(() => {
+      this.classService.createClass(this.classForm).subscribe(() => {
         stepper.next();
       });
     }

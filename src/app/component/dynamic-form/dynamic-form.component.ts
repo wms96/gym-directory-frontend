@@ -4,7 +4,7 @@ import {MatChipGrid, MatChipInput, MatChipInputEvent, MatChipRemove, MatChipRow}
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
-import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
+import {JsonPipe, NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
@@ -36,7 +36,8 @@ import {MatCheckbox} from "@angular/material/checkbox";
     ReactiveFormsModule,
     MatSlideToggle,
     MatCheckbox,
-    NgClass
+    NgClass,
+    JsonPipe
   ],
 })
 export class DynamicFormComponent implements OnInit {
@@ -113,10 +114,11 @@ export class DynamicFormComponent implements OnInit {
   }
 
   getSections(): (string | undefined)[] {
+    console.log('Object.values(this.formMetadata) ', Object.values(this.formMetadata))
     return [...new Set(Object.values(this.formMetadata).map(metadata => metadata.section))];
   }
 
   getControlNamesForSection(section: string | undefined): string[] {
-    return Object.keys(this.formMetadata).filter(controlName => this.formMetadata[controlName].section === section);
+    return Object.keys(this.formMetadata);
   }
 }

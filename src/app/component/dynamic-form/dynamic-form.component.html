@@ -1,10 +1,10 @@
 <form class="m-t-30" [formGroup]="formGroup">
-  <ng-container *ngFor="let section of getSections()">
-    <h3 *ngIf="section">{{ section }}</h3>
     <div class="form-row">
-      <ng-container *ngFor="let controlName of getControlNamesForSection(section)">
+      <ng-container *ngFor="let controlName of getControlNamesForSection(undefined)">
         <ng-container *ngIf="getFieldMetadata(controlName)">
           <ng-container *ngIf="isFormControl(controlName) ">
+            <h3 *ngIf="getFieldMetadata(controlName).section" class="single-row">{{ getFieldMetadata(controlName).section }}</h3>
+
             <mat-form-field appearance="outline" class="w-100" color="primary"
                             *ngIf="getFieldMetadata(controlName).type !== 'checkBox'"
                             [ngClass]="{'single-row': getFieldMetadata(controlName).layout === 'singleRow'}">
@@ -68,5 +68,4 @@
         </ng-container>
       </ng-container>
     </div>
-  </ng-container>
 </form>

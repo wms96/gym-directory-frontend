@@ -14,10 +14,13 @@
         <app-dynamic-form [formGroup]="addressForm" [formMetadata]="addressFormMetadata"></app-dynamic-form>
         <button mat-button (click)="createAddress(stepper)">Next</button>
       </mat-step>
-
-      <mat-step [stepControl]="coachForm">
+      <mat-step>
         <ng-template matStepLabel>Coach</ng-template>
-        <app-dynamic-form [formGroup]="coachForm" [formMetadata]="coachFormMetadata"></app-dynamic-form>
+        <button mat-button (click)="addCoachForm()">Add Coach</button>
+        <div *ngFor="let coachForm of coachForms; let i = index">
+          <app-dynamic-form [formGroup]="coachForm" [formMetadata]="coachFormMetadata"></app-dynamic-form>
+          <button mat-button (click)="removeCoachForm(i)">Remove Coach</button>
+        </div>
         <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button (click)="createCoach(stepper)">Next</button>

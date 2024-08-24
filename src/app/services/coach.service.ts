@@ -21,6 +21,9 @@ export class CoachService {
   createCoach(coach: any): Observable<any> {
     return this.http.post(this.apiUrl, coach);
   }
+  createCoaches(coach: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/bulk`, coach);
+  }
 
   updateCoach(id: number, coach: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, coach);
