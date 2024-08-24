@@ -1,0 +1,73 @@
+<mat-card class="b-1 shadow-none">
+  <div class="m-10">
+    <mat-horizontal-stepper #stepper>
+      <mat-step [stepControl]="gymForm" *ngIf="gymForm">
+        <ng-template matStepLabel>Gym</ng-template>
+        <app-dynamic-form [formGroup]="gymForm" [formMetadata]="gymFormMetadata"></app-dynamic-form>
+        <div>
+          <button mat-button (click)="createGym(stepper)">Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="addressForm">
+        <ng-template matStepLabel>Address</ng-template>
+        <app-dynamic-form [formGroup]="addressForm" [formMetadata]="addressFormMetadata"></app-dynamic-form>
+        <button mat-button (click)="createAddress(stepper)">Next</button>
+      </mat-step>
+
+      <mat-step [stepControl]="coachForm">
+        <ng-template matStepLabel>Coach</ng-template>
+        <app-dynamic-form [formGroup]="coachForm" [formMetadata]="coachFormMetadata"></app-dynamic-form>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="createCoach(stepper)">Next</button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="classForm">
+        <ng-template matStepLabel>Class</ng-template>
+        <app-dynamic-form [formGroup]="classForm" [formMetadata]="classFormMetadata"></app-dynamic-form>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="createClass(stepper)">Next</button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="ownerForm">
+        <ng-template matStepLabel>Owner</ng-template>
+        <app-dynamic-form [formGroup]="ownerForm" [formMetadata]="ownerFormMetadata"></app-dynamic-form>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="createOwner(stepper)">Next</button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="scheduleForm">
+        <ng-template matStepLabel>Schedule</ng-template>
+        <app-dynamic-form [formGroup]="scheduleForm" [formMetadata]="scheduleFormMetadata"></app-dynamic-form>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="createSchedule(stepper)">Next</button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="subscriptionForm">
+        <form [formGroup]="subscriptionForm">
+          <ng-template matStepLabel>Subscription</ng-template>
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Price</mat-label>
+            <input matInput formControlName="price">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Duration (days)</mat-label>
+            <input matInput formControlName="duration_days">
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="createSubscription(stepper)">Finish</button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+</mat-card>

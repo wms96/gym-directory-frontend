@@ -1,0 +1,72 @@
+<form class="m-t-30" [formGroup]="formGroup">
+  <ng-container *ngFor="let section of getSections()">
+    <h3 *ngIf="section">{{ section }}</h3>
+    <div class="form-row">
+      <ng-container *ngFor="let controlName of getControlNamesForSection(section)">
+        <ng-container *ngIf="getFieldMetadata(controlName)">
+          <ng-container *ngIf="isFormControl(controlName) ">
+            <mat-form-field appearance="outline" class="w-100" color="primary"
+                            *ngIf="getFieldMetadata(controlName).type !== 'checkBox'"
+                            [ngClass]="{'single-row': getFieldMetadata(controlName).layout === 'singleRow'}">
+              <mat-label>{{ controlName }}</mat-label>
+
+              <input *ngIf="getFieldMetadata(controlName).type === 'string'" matInput [formControlName]="controlName">
+              <mat-select *ngIf="getFieldMetadata(controlName).type === 'select'" [formControlName]="controlName">
+                <mat-option *ngFor="let option of getFieldMetadata(controlName).options" [value]="option">{{ option }}
+                </mat-option>
+              </mat-select>
+              <mat-chip-grid *ngIf="getFieldMetadata(controlName).type === 'chip'" #chipGrid
+                             aria-label="Enter metadata">
+                <mat-chip-row
+                  *ngFor="let string of getChipsValue(controlName)"
+                  (removed)="remove(controlName, string)"
+                  [editable]="true"
+                  (edited)="edit(controlName, string, $event)"
+                  [aria-description]="'press enter to edit ' + string" class="f-s-14"
+                >
+                  {{ string }}
+                  <button
+                    matChipRemove
+                    [attr.aria-label]="'remove ' + string"
+                  >
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip-row>
+                <input
+                  placeholder="New metadata..."
+                  [matChipInputFor]="chipGrid"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="add(controlName, $event)"
+                />
+              </mat-chip-grid>
+              <mat-error *ngIf="formGroup.get(controlName)?.hasError('required')">{{ controlName }} is required
+              </mat-error>
+              <mat-error *ngIf="formGroup.get(controlName)?.hasError('maxlength')">{{ controlName }} must be less than
+                255
+                characters
+              </mat-error>
+            </mat-form-field>
+
+            <mat-checkbox
+              class="example-margin"
+              *ngIf="getFieldMetadata(controlName).type === 'checkBox'" [formControlName]="controlName">
+              Check me!
+            </mat-checkbox>
+            <ng-container *ngIf="getFieldMetadata(controlName).type === 'file'">
+              <div [formArrayName]="controlName">
+                <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">{{ controlName }}</mat-label>
+                <input *ngIf="getFieldMetadata(controlName).type === 'file'" type="file" multiple
+                       (change)="onFilesChange(controlName, $event)" accept="image/*">
+                <div *ngFor="let filePreviewUrl of getFilePreviewUrls(controlName); let i=index">
+                  <img [src]="filePreviewUrl" alt="File {{ i + 1 }}" class="img-thumbnail">
+                </div>
+              </div>
+            </ng-container>
+
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</form>

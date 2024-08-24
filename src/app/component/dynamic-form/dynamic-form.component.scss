@@ -1,0 +1,14 @@
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Adjust the gap as needed */
+}
+
+.form-row > * {
+  flex: 1 1 calc(33.33% - 16px); /* Adjust the width as needed */
+}
+
+/* Adjust the width for singleRow layout */
+.form-row > .single-row {
+  flex: 1 1 calc(100% - 16px); /* Adjust the width as needed */
+}
